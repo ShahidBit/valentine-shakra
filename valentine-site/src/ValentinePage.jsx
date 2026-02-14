@@ -293,27 +293,27 @@ const ValentinePage = () => {
   }; 
 
 const increaseTries = () => {
-  let updatedTries;
-
   setNoTries(prev => {
-    updatedTries = prev + 1;
-    return updatedTries;
+    const tries = prev + 1;
+
+    if (tries === 1)
+      setMessage("Hmm… that felt like a wrong click 😌");
+    else if (tries === 2)
+      setMessage("Hmm… are you sure? My heart says try again 💕");
+    else if (tries === 3)
+      setMessage("System detected extreme cuteness… retry required 😎");
+    else if (tries === 4)
+      setMessage("Dil toh pagal hai… phir try karega 💕");
+    else if (tries === 5)
+      setMessage("Background me romantic music baj raha hai 🎶");
+    else if (tries >= 6)
+      setMessage("Ok I surrender… but my heart still says YES 🥹💖");
+
+    return tries;
   });
-
-  // We use updatedTries AFTER state calculation
-  if (noTries + 1 === 1) setMessage("Hmm… that felt like a wrong click 😌");
-  if (noTries + 1 === 2) setMessage("Hmm… are you sure? My heart says try again 💕");
-  if (noTries + 1 === 3) setMessage("System detected extreme cuteness… retry required 😎");
-  if (noTries + 1 === 4) setMessage("Dil toh pagal hai… phir try karega 💕");
-  if (noTries + 1 === 5) setMessage("Background me romantic music baj raha hai 🎶");
-
-  if (noTries + 1 >= 6) {
-    setMessage("Ok I surrender… but my heart still says YES 🥹💖");
-    setNoMerged(true);
-  }
-
-  return noTries + 1;
 };
+
+
 
 
   /* ===== NO ESCAPE ===== */
@@ -396,44 +396,20 @@ const increaseTries = () => {
                 {message}
               </Text>
             )}
+             <>
+            <Button id="yes-btn" $primary onClick={handleYesClick}>
+              YES 💕
+            </Button>
 
-            {!noMerged ? ( <>
-              <Button id="yes-btn" $primary onClick={handleYesClick}>
-                YES 💕
-              </Button>
-             <NoButton
+            <NoButton
               ref={noRef}
               onMouseEnter={moveNoButton}
               onClick={moveNoButton}
             >
               NO 😜
-            </NoButton>
-
-          </>
-            ) : (
-              <YesContainer onClick={handleYesClick}>
-                <BigYes>YES 💕</BigYes>
-                <TinyNo
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleYesClick();
-                  }}
-                >
-                  NO
-                </TinyNo>
-              </YesContainer>
-            )}
-              {/* <ButtonRow>
-                <YesButton onClick={handleYesClick}>
-                  YES 💕
-                </YesButton>
-
-                {!floating && (
-                  <NoButton ref={noRef}>
-                    NO 😜
-                  </NoButton>
-                )}
-              </ButtonRow> */}
+             </NoButton>
+            
+            </>
             </>
           ) : (
             <>
