@@ -90,7 +90,7 @@ const Card = styled.div`
     inset: 0;
     background: url(${props =>
       props.$accepted
-        ? "/images/bear2.gif"
+        ? "/images/bear4.gif"
         : "/images/bear.gif"
     }) center 35% / cover no-repeat;
     opacity: 0.8;
@@ -134,7 +134,7 @@ const ForeverText = styled.h3`
   color: #ffb3d9;
 
   text-shadow:
-    0 0 10px rgba(255,182,193,0.6);
+    0 0 10px rgba(157, 55, 70, 0.6);
 `;
 
 
@@ -292,22 +292,29 @@ const ValentinePage = () => {
     confetti({ particleCount: 300, spread: 160 });
   }; 
 
-  const increaseTries = () => {
-  const tries = noTries + 1;
-  setNoTries(tries);
+const increaseTries = () => {
+  let updatedTries;
 
-if (tries === 1) setMessage("Hmm… that felt like a wrong click 😌");
-if (tries === 2) setMessage("Hmm… are you sure? My heart says try again 💕");
-if (tries === 3) setMessage("System detected extreme cuteness… retry required 😎");
-if (tries === 4) setMessage("Dil toh pagal hai… phir try karega 💕");
-if (tries === 5) setMessage("Background me romantic music baj raha hai 🎶");
-if (tries >= 6) {
-  setMessage("Ok I surrender… but my heart still says YES 🥹💖");
-  setNoMerged(true);
-}
+  setNoTries(prev => {
+    updatedTries = prev + 1;
+    return updatedTries;
+  });
 
-  return tries;
+  // We use updatedTries AFTER state calculation
+  if (noTries + 1 === 1) setMessage("Hmm… that felt like a wrong click 😌");
+  if (noTries + 1 === 2) setMessage("Hmm… are you sure? My heart says try again 💕");
+  if (noTries + 1 === 3) setMessage("System detected extreme cuteness… retry required 😎");
+  if (noTries + 1 === 4) setMessage("Dil toh pagal hai… phir try karega 💕");
+  if (noTries + 1 === 5) setMessage("Background me romantic music baj raha hai 🎶");
+
+  if (noTries + 1 >= 6) {
+    setMessage("Ok I surrender… but my heart still says YES 🥹💖");
+    setNoMerged(true);
+  }
+
+  return noTries + 1;
 };
+
 
   /* ===== NO ESCAPE ===== */
 
