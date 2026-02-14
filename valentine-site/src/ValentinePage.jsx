@@ -313,7 +313,7 @@ const increaseTries = () => {
     else if (tries === 4)
       setMessage("Dil toh pagal hai… phir try karega 💕");
     else if (tries === 5)
-      setMessage("Background me romantic music baj raha hai 🎶");
+      setMessage("Background me romantic song baj raha hai....🎶 kuch to khayal kijiye 🥹");
     else if (tries >= 6)
       setMessage("Thukaraaoge thukara lo....🥹 Ham thhokar kha kar bhi tumhaare dar pe aenge 💖");
 
@@ -422,7 +422,7 @@ useEffect(() => {
             onClick={moveNoButton}
             onTouchStart={moveNoButton}   // 🔥 MOBILE SUPPORT
           >
-            NO 😜
+            NO 🥹
           </NoButton>
             
             </>
