@@ -9,15 +9,9 @@ const twinkle = keyframes`
   50% { opacity: 0.2; }
 `;
 
-const shoot = keyframes`
-  0% { transform: translateX(0) translateY(0); opacity: 1; }
-  100% { transform: translateX(-800px) translateY(400px); opacity: 0; }
-`;
-
 const sparkle = keyframes`
-  0% { text-shadow: 0 0 5px #fff; }
-  50% { text-shadow: 0 0 25px #ff69b4, 0 0 50px #ffd700; }
-  100% { text-shadow: 0 0 5px #fff; }
+  0%,100% { text-shadow: 0 0 5px #fff; }
+  50% { text-shadow: 0 0 25px #ff69b4, 0 0 45px #ffd700; }
 `;
 
 const glowRing = keyframes`
@@ -26,37 +20,19 @@ const glowRing = keyframes`
   100% { transform: scale(0.85); text-shadow: 0 0 10px #fff; }
 `;
 
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`;
-
 /* ================= STYLED ================= */
 
 const Page = styled.div`
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+  min-height: 100vh;
   background: radial-gradient(circle at bottom, #0b0f2a 0%, #000 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
-  position: relative;
   color: white;
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  z-index: 20;
-  animation: ${fadeIn} 1s ease;
-  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
 `;
 
 const Star = styled.div`
@@ -69,111 +45,178 @@ const Star = styled.div`
   animation: ${twinkle} ${() => Math.random() * 3 + 2}s infinite;
 `;
 
-const ShootingStar = styled.div`
-  position: absolute;
-  top: ${() => Math.random() * 40}%;
-  right: -100px;
-  width: 3px;
-  height: 3px;
-  background: white;
-  animation: ${shoot} 3s linear infinite;
-`;
-
 const Moon = styled.div`
   position: absolute;
-  top: 80px;
-  right: 120px;
+  top: 60px;
+  right: 60px;
   width: 120px;
   height: 120px;
-  background: radial-gradient(circle, #fff 40%, #ddd 70%);
+  background: radial-gradient(circle, #ffffff 40%, #ddd 70%);
   border-radius: 50%;
-  box-shadow: 0 0 60px #fff;
+  box-shadow: 0 0 60px #ffffff;
+
+  @media (max-width: 600px) {
+    width: 90px;
+    height: 90px;
+    top: 40px;
+    right: 30px;
+  }
+`;
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
 
 const Card = styled.div`
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.08);
-  padding: 60px;
-  border-radius: 30px;
-  width: 600px;
-  max-width: 90%;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 24px;
+  padding: 30px;
   text-align: center;
-  z-index: 5;
+  z-index: 2;
+  position: relative;
+  overflow: hidden;
+
+  background: rgba(10, 15, 40, 0.35);
+  backdrop-filter: blur(6px);
+
+  animation: ${fadeIn} 0.6s ease;
+
+  &::before {
+    content: "";
+    opacity: 0.6;
+    position: absolute;
+    inset: 0;
+    background: url(${props =>
+      props.$accepted
+        ? "/images/bear2.gif"
+        : "/images/bear.gif"
+    }) center 35% / cover no-repeat;
+    opacity: 0.8;
+    z-index: 0;
+    transition: background 0.4s ease;
+  }
+  &::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 1;
+}
+  
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
 `;
 
 const Title = styled.h1`
-  font-size: 3rem;
-  margin-bottom: 20px;
-  animation: ${sparkle} 3s infinite;
+  font-size: 2.4rem;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  color: #ff6fa5;
+
+  text-shadow:
+    0 0 8px rgba(255,111,165,0.7),
+    0 0 18px rgba(255,111,165,0.5);
 `;
 
+const ForeverText = styled.h3`
+  margin-top: 30px;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+
+  color: #ffb3d9;
+
+  text-shadow:
+    0 0 10px rgba(255,182,193,0.6);
+`;
+
+
+const LoveText = styled.p`
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  font-weight: 500;
+
+  color: #ffffff;
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.6);
+`;
+
+
+
 const Text = styled.p`
-  font-size: 1.3rem;
-  margin-bottom: 15px;
+  font-size: 1.05rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+
+  text-shadow:
+    0 2px 6px rgba(0,0,0,0.7);
+`;
+
+
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 `;
 
 const Button = styled.button`
-  padding: 15px 35px;
-  font-size: 1.1rem;
-  border-radius: 40px;
+  padding: 10px 22px;
+  border-radius: 25px;
   border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-weight: bold;
-  margin: 10px;
-  transition: 0.2s;
-  background: ${({ primary }) => (primary ? "#ff2e63" : "white")};
-  color: ${({ primary }) => (primary ? "white" : "#ff2e63")};
 
-  &:hover {
-    transform: scale(1.1);
-  }
+  background: ${({ $primary }) =>
+    $primary ? "#ff2e63" : "white"};
+
+  color: ${({ $primary }) =>
+    $primary ? "white" : "#ff2e63"};
 `;
 
-const FloatingNoButton = styled(Button)`
-  position: fixed;
-  z-index: 10;
-`;
 
-const YesContainer = styled.div`
-  position: relative;
-  display: inline-block;
-  padding: 20px 60px;
-  border-radius: 50px;
+const YesButton = styled(Button)`
   background: #ff2e63;
   color: white;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-
-  &:hover {
-    transform: scale(1.1);
-  }
 `;
 
-const BigYes = styled.div`
-  font-size: 1.5rem;
-`;
-
-const TinyNo = styled.button`
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
-  font-size: 0.5rem;
-  padding: 4px 8px;
-  border-radius: 20px;
-  border: none;
+const NoButton = styled(Button)`
   background: white;
   color: #ff2e63;
-  cursor: pointer;
-  opacity: 0.8;
+`;
 
-  &:hover {
-    opacity: 1;
-  }
+const FloatingNo = styled(Button)`
+  position: fixed;
+  background: white;
+  color: #ff2e63;
+  z-index: 50;
+  transition: none;
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  text-align: center;
 `;
 
 const Ring = styled.div`
-  font-size: 120px;
+  font-size: 110px;
   margin-top: 20px;
   animation: ${glowRing} 2s infinite;
 `;
@@ -182,110 +225,184 @@ const Ring = styled.div`
 
 const ValentinePage = () => {
   const [accepted, setAccepted] = useState(false);
+  const [floating, setFloating] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+  const [showIntro, setShowIntro] = useState(true);
+  const [readyClicked, setReadyClicked] = useState(false);
   const [noTries, setNoTries] = useState(0);
   const [message, setMessage] = useState("");
-  const [noMerged, setNoMerged] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
-
-  const noRef = useRef(null);
   const audioRef = useRef(null);
+  const noRef = useRef(null);
+  const [noMerged, setNoMerged] = useState(false);
 
-  /* ===== MUSIC AUTOPLAY ===== */
-  useEffect(() => {
-    const tryPlay = async () => {
-      try {
-        await audioRef.current.play();
-      } catch {
-        setShowOverlay(true);
+
+  /* ===== READY BUTTON ===== */
+
+  const handleReady = () => {
+    setReadyClicked(true);
+
+    // Unlock autoplay
+    audioRef.current.play().catch(() => {});
+    audioRef.current.pause();
+
+    let count = 3;
+
+    const timer = setInterval(() => {
+      setCountdown(count);
+      count--;
+
+      if (count < 0) {
+        clearInterval(timer);
+        setShowIntro(false);
+
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
       }
-    };
-    tryPlay();
-  }, []);
-
-  const startMusic = () => {
-    audioRef.current.play();
-    setShowOverlay(false);
+    }, 1000);
   };
 
-  /* ===== NO BUTTON LOGIC ===== */
 
   const moveNoButton = () => {
-    const button = noRef.current;
-    const tries = noTries + 1;
-    setNoTries(tries);
+  const button = noRef.current;
+  if (!button) return;
 
-    const maxX = window.innerWidth - button.offsetWidth - 10;
-    const maxY = window.innerHeight - button.offsetHeight - 10;
+  const tries = increaseTries();
 
-    let x = Math.random() * maxX;
-    let y = Math.random() * maxY;
+  const maxX = window.innerWidth - button.offsetWidth - 10;
+  const maxY = window.innerHeight - button.offsetHeight - 10;
 
-    if (tries === 1) setMessage("Ohhh no no no DUA 😜 try again!");
-    if (tries === 2) {
-      setMessage("Too slow SHAKRA 😏 I'm getting faster!");
-      button.style.transition = "all 0.05s linear";
-    }
-    if (tries === 3) {
-      setMessage("FLASH MODE ⚡ Activated!");
-      button.style.transition = "none";
-    }
-    if (tries === 4) {
-      setMessage("You can't escape destiny 💫");
-      button.style.opacity = "0";
-      setTimeout(() => (button.style.opacity = "1"), 800);
-    }
-    if (tries === 5) {
-      setMessage("You are persistent 😏");
-    }
-    if (tries >= 6) {
-      setMessage("Okay fine… destiny wins 💖");
-      setNoMerged(true);
-      return;
-    }
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-    button.style.left = `${x}px`;
-    button.style.top = `${y}px`;
-  };
+  if (tries === 2) button.style.transition = "all 0.05s linear";
+  if (tries === 3) button.style.transition = "none";
+  if (tries === 4) {
+    button.style.opacity = "0";
+    setTimeout(() => (button.style.opacity = "1"), 800);
+  }
+
+  button.style.left = `${x}px`;
+  button.style.top = `${y}px`;
+};
 
   /* ===== YES CLICK ===== */
 
   const handleYesClick = () => {
     setAccepted(true);
-    confetti({ particleCount: 300, spread: 180 });
-  };
+    confetti({ particleCount: 300, spread: 160 });
+  }; 
+
+  const increaseTries = () => {
+  const tries = noTries + 1;
+  setNoTries(tries);
+
+if (tries === 1) setMessage("Hmm… that felt like a wrong click 😌");
+if (tries === 2) setMessage("Hmm… are you sure? My heart says try again 💕");
+if (tries === 3) setMessage("System detected extreme cuteness… retry required 😎");
+if (tries === 4) setMessage("Dil toh pagal hai… phir try karega 💕");
+if (tries === 5) setMessage("Background me romantic music baj raha hai 🎶");
+if (tries >= 6) {
+  setMessage("Ok I surrender… but my heart still says YES 🥹💖");
+  setNoMerged(true);
+}
+
+  return tries;
+};
+
+  /* ===== NO ESCAPE ===== */
+
+  useEffect(() => {
+    const handleMove = (e) => {
+      if (!noRef.current || accepted || showIntro) return;
+
+      const rect = noRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+
+      if (distance < 100) {
+        setFloating(true);
+        increaseTries();   // 🔥 THIS IS THE FIX
+
+
+        const maxX = window.innerWidth - rect.width - 20;
+        const maxY = window.innerHeight - rect.height - 20;
+
+        noRef.current.style.left = `${Math.random() * maxX}px`;
+        noRef.current.style.top = `${Math.random() * maxY}px`;
+      }
+    };
+
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [accepted, showIntro]);
 
   return (
     <Page>
-      {showOverlay && (
-        <Overlay onClick={startMusic}>
-          💖 Tap Anywhere To Begin Our Story 💖
+
+      {/* INTRO */}
+      {showIntro && (
+        <Overlay>
+          {!readyClicked ? (
+            <div>
+              <h2 style={{ marginBottom: "20px" }}>
+                ⚠️ Warning… Hold Your Heart…
+              </h2>
+              <p style={{ marginBottom: "20px" }}>
+                A thief is coming… ❤️
+              </p>
+              <Button
+                style={{ background: "#ff2e63", color: "white" }}
+                onClick={handleReady}
+              >
+                READY 💫
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <h2>Get Ready...</h2>
+              <h1 style={{ fontSize: "3rem" }}>{countdown}</h1>
+            </div>
+          )}
         </Overlay>
       )}
 
-      {[...Array(120)].map((_, i) => <Star key={i} />)}
-      {[...Array(3)].map((_, i) => <ShootingStar key={i} />)}
+      {[...Array(80)].map((_, i) => <Star key={i} />)}
       <Moon />
 
-      <Card>
-        {!accepted ? (
-          <>
-            <Title>SHAKRA ✨</Title>
-            <Text>
-              My beautiful <strong>DUA</strong>,  
-              under this sky full of stars…  
-              Will you be my Valentine? 💘
-            </Text>
+     <Card $accepted={accepted}>
 
-            {message && (
+        {!showIntro && (
+          !accepted ? (
+            <>
+              <Title>SHAKRA ✨</Title>
+
+              <Text>
+              My beautiful <strong>DUA</strong>…  
+              Under this moonlit sky, where every heartbeat whispers your name,  
+              will you be my Valentine? 💖
+              </Text>
+
+               {message && (
               <Text style={{ color: "#ffd700", fontWeight: "bold" }}>
                 {message}
               </Text>
             )}
 
-            {!noMerged ? (
-              <Button id="yes-btn" primary onClick={handleYesClick}>
+            {!noMerged ? ( <>
+              <Button id="yes-btn" $primary onClick={handleYesClick}>
                 YES 💕
               </Button>
+             <NoButton
+              ref={noRef}
+              onMouseEnter={moveNoButton}
+              onClick={moveNoButton}
+            >
+              NO 😜
+            </NoButton>
+
+          </>
             ) : (
               <YesContainer onClick={handleYesClick}>
                 <BigYes>YES 💕</BigYes>
@@ -299,29 +416,47 @@ const ValentinePage = () => {
                 </TinyNo>
               </YesContainer>
             )}
-          </>
-        ) : (
-          <>
-            <Title>Forever Begins 💖</Title>
-            <Text>
-              Shakra… You are my DUA answered by destiny.
-            </Text>
-            <Ring>💍</Ring>
-            <Text style={{ fontWeight: "bold" }}>
-              ✨ SHAKRA, YOU ARE MY FOREVER ✨
-            </Text>
-          </>
+              {/* <ButtonRow>
+                <YesButton onClick={handleYesClick}>
+                  YES 💕
+                </YesButton>
+
+                {!floating && (
+                  <NoButton ref={noRef}>
+                    NO 😜
+                  </NoButton>
+                )}
+              </ButtonRow> */}
+            </>
+          ) : (
+            <>
+                <Title>Forever Begins 💖</Title>
+
+                <LoveText>
+                  Shakra Naaz…  
+                  You are not just my DUA 🤲,  
+                  you are the destiny my heart was always searching for ✨ 
+                  And it chose you before I even knew 💕
+                </LoveText>
+
+                <ForeverText>
+                  ✨ SHAKRA, YOU ARE MY FOREVER ✨
+                </ForeverText>
+              </>
+
+          )
         )}
       </Card>
 
-      {!accepted && !noMerged && (
-        <FloatingNoButton
+      {!accepted && floating && !showIntro && (
+        <FloatingNo
           ref={noRef}
           style={{ left: "70%", top: "70%" }}
           onMouseEnter={moveNoButton}
-        >
+          onClick={moveNoButton}
+>
           NO 😜
-        </FloatingNoButton>
+        </FloatingNo>
       )}
 
       <audio ref={audioRef} src="/music/romantic.mp3" loop />
