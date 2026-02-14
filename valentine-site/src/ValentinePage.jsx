@@ -9,10 +9,6 @@ const twinkle = keyframes`
   50% { opacity: 0.2; }
 `;
 
-const sparkle = keyframes`
-  0%,100% { text-shadow: 0 0 5px #fff; }
-  50% { text-shadow: 0 0 25px #ff69b4, 0 0 45px #ffd700; }
-`;
 
 const glowRing = keyframes`
   0% { transform: scale(0.85); text-shadow: 0 0 10px #fff; }
@@ -221,11 +217,27 @@ const Ring = styled.div`
   animation: ${glowRing} 2s infinite;
 `;
 
+const Credit = styled.div`
+  position: fixed;
+  bottom: 15px;
+  right: 20px;
+
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+
+  color: rgba(255, 182, 193, 0.7);
+  font-family: "Poppins", sans-serif;
+
+  text-shadow: 0 0 8px rgba(255, 105, 180, 0.4);
+
+  z-index: 200;
+
+`;
+
 /* ================= COMPONENT ================= */
 
 const ValentinePage = () => {
   const [accepted, setAccepted] = useState(false);
-  const [floating, setFloating] = useState(false);
   const [countdown, setCountdown] = useState(3);
   const [showIntro, setShowIntro] = useState(true);
   const [readyClicked, setReadyClicked] = useState(false);
@@ -233,8 +245,6 @@ const ValentinePage = () => {
   const [message, setMessage] = useState("");
   const audioRef = useRef(null);
   const noRef = useRef(null);
-  const [noMerged, setNoMerged] = useState(false);
-
 
   /* ===== READY BUTTON ===== */
 
@@ -262,28 +272,26 @@ const ValentinePage = () => {
   };
 
 
-  const moveNoButton = () => {
+ const moveNoButton = () => {
   const button = noRef.current;
   if (!button) return;
 
-  const tries = increaseTries();
+  increaseTries();
 
-  const maxX = window.innerWidth - button.offsetWidth - 10;
-  const maxY = window.innerHeight - button.offsetHeight - 10;
+  const card = button.parentElement; // move inside card
+  const rect = card.getBoundingClientRect();
+
+  const maxX = rect.width - button.offsetWidth - 10;
+  const maxY = rect.height - button.offsetHeight - 10;
 
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
 
-  if (tries === 2) button.style.transition = "all 0.05s linear";
-  if (tries === 3) button.style.transition = "none";
-  if (tries === 4) {
-    button.style.opacity = "0";
-    setTimeout(() => (button.style.opacity = "1"), 800);
-  }
-
+  button.style.position = "absolute";
   button.style.left = `${x}px`;
   button.style.top = `${y}px`;
 };
+
 
   /* ===== YES CLICK ===== */
 
@@ -307,7 +315,7 @@ const increaseTries = () => {
     else if (tries === 5)
       setMessage("Background me romantic music baj raha hai 🎶");
     else if (tries >= 6)
-      setMessage("Ok I surrender… but my heart still says YES 🥹💖");
+      setMessage("Thukaraaoge thukara lo....🥹 Ham thhokar kha kar bhi tumhaare dar pe aenge 💖");
 
     return tries;
   });
@@ -318,32 +326,39 @@ const increaseTries = () => {
 
   /* ===== NO ESCAPE ===== */
 
-  useEffect(() => {
-    const handleMove = (e) => {
-      if (!noRef.current || accepted || showIntro) return;
+useEffect(() => {
+  const handleMove = (e) => {
+    const button = noRef.current;
+    if (!button || accepted || showIntro) return;
 
-      const rect = noRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+    const card = button.parentElement;
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = button.getBoundingClientRect();
 
-      const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+    const centerX = btnRect.left + btnRect.width / 2;
+    const centerY = btnRect.top + btnRect.height / 2;
 
-      if (distance < 100) {
-        setFloating(true);
-        increaseTries();   // 🔥 THIS IS THE FIX
+    const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
 
+    if (distance < 100) {
+      increaseTries();
 
-        const maxX = window.innerWidth - rect.width - 20;
-        const maxY = window.innerHeight - rect.height - 20;
+      const maxX = cardRect.width - btnRect.width - 10;
+      const maxY = cardRect.height - btnRect.height - 10;
 
-        noRef.current.style.left = `${Math.random() * maxX}px`;
-        noRef.current.style.top = `${Math.random() * maxY}px`;
-      }
-    };
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
 
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, [accepted, showIntro]);
+      button.style.position = "absolute";
+      button.style.left = `${x}px`;
+      button.style.top = `${y}px`;
+    }
+  };
+
+  window.addEventListener("mousemove", handleMove);
+  return () => window.removeEventListener("mousemove", handleMove);
+}, [accepted, showIntro]);
+
 
   return (
     <Page>
@@ -401,13 +416,14 @@ const increaseTries = () => {
               YES 💕
             </Button>
 
-            <NoButton
-              ref={noRef}
-              onMouseEnter={moveNoButton}
-              onClick={moveNoButton}
-            >
-              NO 😜
-             </NoButton>
+           <NoButton
+            ref={noRef}
+            onMouseEnter={moveNoButton}
+            onClick={moveNoButton}
+            onTouchStart={moveNoButton}   // 🔥 MOBILE SUPPORT
+          >
+            NO 😜
+          </NoButton>
             
             </>
             </>
@@ -431,18 +447,11 @@ const increaseTries = () => {
         )}
       </Card>
 
-      {!accepted && floating && !showIntro && (
-        <FloatingNo
-          ref={noRef}
-          style={{ left: "70%", top: "70%" }}
-          onMouseEnter={moveNoButton}
-          onClick={moveNoButton}
->
-          NO 😜
-        </FloatingNo>
-      )}
-
       <audio ref={audioRef} src="/music/romantic.mp3" loop />
+      <Credit>
+  Created by Shahid with love for Shakra 💖
+</Credit>
+
     </Page>
   );
 };
